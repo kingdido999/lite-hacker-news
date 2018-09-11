@@ -1,0 +1,9 @@
+[package]
+name = "lite-hacker-news"
+version = "0.1.0"
+authors = ["Desmond Ding <info@desmonding.me>"]
+edition = "2018"
+
+[dependencies]
+rocket = "0.3.16"
+rocket_codegen = "0.3.16"
