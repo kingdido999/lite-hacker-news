@@ -10,3 +10,14 @@ pub fn fetch_top_stories() -> Result<Vec<u64>, Box<std::error::Error>> {
   let top_stories: Vec<u64> = serde_json::from_str(&res)?;
   Ok(top_stories)
 }
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  #[test]
+  fn it_fetches_top_stories() {
+    let top_stories = fetch_top_stories().unwrap();
+    assert!(top_stories.len() > 0);
+  }
+}
