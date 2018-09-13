@@ -2,6 +2,35 @@ extern crate reqwest;
 extern crate serde;
 extern crate serde_json;
 
+pub struct HackerNews {
+  client: reqwest::Client,
+}
+
+impl HackerNews {
+  pub fn new() -> HackerNews {
+    HackerNews {
+      client: reqwest::Client::new(),
+    }
+  }
+
+  pub fn fetch_top_story_ids(&self) -> Result<Vec<u64>, Box<std::error::Error>> {
+    let res = self
+      .client
+      .get("https://hacker-news.firebaseio.com/v0/topstories.json")
+      .send()?
+      .text()?;
+    let top_stories: Vec<u64> = serde_json::from_str(&res)?;
+    Ok(top_stories)
+  }
+
+  pub fn fetch_item_by_id(&self, id: u64) -> Result<Item, Box<std::error::Error>> {
+    let url = format!("https://hacker-news.firebaseio.com/v0/item/{}.json", id);
+    let res = self.client.get(&*url).send()?.text()?;
+    let item: Item = serde_json::from_str(&res)?;
+    Ok(item)
+  }
+}
+
 #[derive(Debug, Deserialize)]
 pub struct Item {
   id: u64,
@@ -18,38 +47,22 @@ pub struct Item {
   title: Option<String>,
 }
 
-pub fn fetch_top_stories() -> Result<Vec<u64>, Box<std::error::Error>> {
-  let client = reqwest::Client::new();
-  let res = client
-    .get("https://hacker-news.firebaseio.com/v0/topstories.json")
-    .send()?
-    .text()?;
-  let top_stories: Vec<u64> = serde_json::from_str(&res)?;
-  Ok(top_stories)
-}
-
-pub fn fetch_item_by_id(id: u64) -> Result<Item, Box<std::error::Error>> {
-  let client = reqwest::Client::new();
-  let url = format!("https://hacker-news.firebaseio.com/v0/item/{}.json", id);
-  let res = client.get(&*url).send()?.text()?;
-  let item: Item = serde_json::from_str(&res)?;
-  Ok(item)
-}
-
 #[cfg(test)]
 mod tests {
-  use super::*;
+  use super::HackerNews;
 
   #[test]
-  fn it_fetches_top_stories() {
-    let top_stories = fetch_top_stories().unwrap();
+  fn it_fetches_top_story_ids() {
+    let hn = HackerNews::new();
+    let top_stories = hn.fetch_top_story_ids().unwrap();
     assert!(top_stories.len() > 0);
   }
 
   #[test]
   fn it_fetches_item_by_id() {
+    let hn = HackerNews::new();
     let id = 8863;
-    let item = fetch_item_by_id(id).unwrap();
+    let item = hn.fetch_item_by_id(id).unwrap();
     assert_eq!(item.id, id);
     assert_eq!(item._type, String::from("story"));
     assert_eq!(item.by, String::from("dhouston"));
