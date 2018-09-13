@@ -1,8 +1,9 @@
 #![feature(plugin)]
 #![plugin(rocket_codegen)]
 
-extern crate reqwest;
 extern crate rocket;
+extern crate serde_derive;
+
 pub mod hackernews;
 
 #[get("/")]
@@ -20,6 +21,7 @@ mod tests {
 
     #[test]
     fn it_fetches_top_stories() {
-        hackernews::fetch_top_stories();
+        let top_stories = hackernews::fetch_top_stories().unwrap();
+        assert!(top_stories.len() > 0);
     }
 }
