@@ -5,9 +5,8 @@ As a heavy user of [Hacker News](https://news.ycombinator.com/), I've been wasti
 ## TODO
 
 - [x] Fetch top stories via [HackerNews API](https://github.com/HackerNews/API)
+- [ ] Run a job to fetch and save stories in DB periodically
 - [ ] Render top stories in HTML
-- [ ] Subscribe and update top stories
-- [ ] Save article contents in DB
 - [ ] Load and cache the content of stories in client-side
 
 ## Development

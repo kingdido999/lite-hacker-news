@@ -7,6 +7,9 @@ extern crate rocket;
 extern crate serde_derive;
 
 pub mod hackernews;
+pub mod job;
+
+use std::thread;
 
 #[get("/")]
 fn index() -> &'static str {
@@ -14,5 +17,9 @@ fn index() -> &'static str {
 }
 
 fn main() {
+    thread::spawn(|| {
+        job::run();
+    });
+
     rocket::ignite().mount("/", routes![index]).launch();
 }
