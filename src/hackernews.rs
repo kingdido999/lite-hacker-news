@@ -1,7 +1,3 @@
-extern crate reqwest;
-extern crate serde;
-extern crate serde_json;
-
 use std::error::Error;
 
 pub struct HackerNews {
