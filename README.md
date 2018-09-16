@@ -11,6 +11,14 @@ As a heavy user of [Hacker News](https://news.ycombinator.com/), I've been wasti
 
 ## Development
 
+Create a `.env` file out of the example and modify username and password for your local [PostgreSQL](https://www.postgresql.org/) instance:
+
+```bash
+cp .env.example .env
+```
+
+Start the project:
+
 ```bash
 cargo run
 ```
